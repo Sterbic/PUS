@@ -1,4 +1,4 @@
-PUS
-===
+# PUS
 
-Set of lab assignments for the PUS class @ FER
+
+Set of lab assignments for the Networked Systems Middleware class @ FER.
