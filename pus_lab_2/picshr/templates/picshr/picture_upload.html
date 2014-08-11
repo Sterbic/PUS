@@ -1,0 +1,28 @@
+{% extends "picshr/base.html" %}
+{% block content %}
+
+<form action="{% url 'upload_picture' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>Title:</td>
+            <td><input type="text" name="title"></td>
+        </tr>
+        <tr>
+            <td>Picture:</td>
+            <td><input type="file" name="file" accept="image/*"></td>
+        </tr>
+        <tr>
+            <td>Visibility:</td>
+            <td>
+                <select name="visibility">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Upload"/>
+</form>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "picshr/base.html" %}
+{% block content %}
+
+<header><h2>{{ other_user.username }}</h2></header>
+
+<span class="byline">Friends:</span>
+<p><ul>
+{% for friend in other_user.is_friend_set.all %}
+    <li><a href="{% url 'user_detail' friend.friend_to.username %}">{{ friend.friend_to.username }}</a></li>
+{% empty %}
+    </ul>No friends added yet!<ul>
+{% endfor %}
+</ul></p>
+<br>
+<span class="byline">Public pictures:</span>
+<p>
+{% for picture in public_pics.all %}
+    <a href="{% url 'picture_detail' picture.pk %}"><img src="{{ picture.image.url }}" width="25%"></a>
+    {% empty%}
+        There are no public pictures!
+    {% endfor %}
+</p>
+{% if private_access %}
+<br>
+<span class="byline">Private pictures:</span>
+<p>
+{% for picture in private_pics.all %}
+    <a href="{% url 'picture_detail' picture.pk %}"><img src="{{ picture.image.url }}" width="25%"></a>
+    {% empty%}
+        There are no private pictures!
+    {% endfor %}
+</p>
+{% else %}
+<form method="post" action="{% url 'send_friend_req' %}">
+{% csrf_token %}
+    <input type="hidden" name="user_id" value="{{ other_user.pk }}">
+    <input type="submit" value="Send Friend Request"/>
+</form>
+{% endif %}
+
+{% endblock %}

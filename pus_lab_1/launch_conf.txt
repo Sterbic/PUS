@@ -1,0 +1,3 @@
+CR: python3 central_registry.py CR 127.0.0.1 5687
+SP1: python3 service_provider.py SP1 127.0.0.1 3476 127.0.0.1 5687 config/sp1_users.txt
+SP2: python3 service_provider.py SP2 127.0.0.1 4598 127.0.0.1 5687 config/sp2_users.txt

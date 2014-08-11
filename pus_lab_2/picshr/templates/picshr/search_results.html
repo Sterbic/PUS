@@ -1,0 +1,14 @@
+{% extends "picshr/base.html" %}
+{% block content %}
+
+<header><h2>Search Results:</h2></header>
+
+<ul>
+{% for username in matched %}
+    <li><a href="{% url 'user_detail' username %}">{{ username }}</a></li>
+{% empty %}
+    </ul>No users matched your search!<ul>
+{% endfor %}
+</ul>
+
+{% endblock %}

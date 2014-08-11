@@ -1,0 +1,111 @@
+{% extends "picshr/base.html" %}
+{% block content %}
+
+<header><h2>{{ object.username }}</h2></header>
+
+<br>
+<span class="byline">Friend requests:</span>
+<table>
+    {% for friend_req in object.req_to_set.all %}
+        <tr>
+            <td><a href="{% url 'user_detail' friend_req.req_from.username %}">{{ friend_req.req_from.username }}</a></td>
+            <td>
+                <form method="post" action="{% url 'resolve_friend_req' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="req_id" value="{{ friend_req.pk }}">
+                    <input type="hidden" name="response" value="accept">
+                    <input type="submit" value="Accept"/>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="{% url 'resolve_friend_req' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="req_id" value="{{ friend_req.pk }}">
+                    <input type="hidden" name="response" value="decline">
+                    <input type="submit" value="Decline"/>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>There are no pending friend requests!</tr>
+    {% endfor %}
+</table>
+
+<br>
+<span class="byline">Friends:</span>
+<table>
+    {% for friend in object.is_friend_set.all %}
+        <tr>
+            <td><a href="{% url 'user_detail' friend.friend_to.username %}">{{ friend.friend_to.username }}</a></td>
+            <td>
+                <form method="post" action="{% url 'delete_friend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="friend_id" value="{{ friend.pk }}">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>No friends added yet!</tr>
+    {% endfor %}
+</table>
+
+<br>
+<span class="byline">Pictures:</span>
+<table>
+    {% for picture in object.picture_set.all %}
+        <tr>
+            <td><a href="{% url 'picture_detail' picture.pk %}">{{ picture.title }}</a></td>
+            <td>
+                <form method="post" action="{% url 'delete_picture' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="picture_id" value="{{ picture.pk }}">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>No friends added yet!</tr>
+    {% endfor %}
+</table>
+
+<br>
+<span class="byline">Comments:</span>
+<table>
+    {% for comment in object.comment_set.all %}
+        <tr>
+            <td><a href="{% url 'picture_detail' comment.on_picture.pk %}">{{ comment.on_picture.title }}</a></td>
+            <td>{{ comment.content }}</td>
+            <td>
+                <form method="post" action="{% url 'delete_comment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+       <tr>You have not commented any pictures!</tr>
+    {% endfor %}
+</table>
+
+<br>
+<span class="byline">Tags:</span>
+<table>
+    {% for tag_picture in object.tags.all %}
+        <tr>
+            <td><a href="{% url 'picture_detail' tag_picture.pk %}">{{ tag_picture.title }}</a></td>
+            <td>
+                <form method="post" action="{% url 'delete_tag' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="picture_id" value="{{ tag_picture.pk }}">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+       <tr>You haven't been tagged on any picture!</tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

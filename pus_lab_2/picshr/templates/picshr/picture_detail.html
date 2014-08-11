@@ -1,0 +1,78 @@
+{% extends "picshr/base.html" %}
+{% block content %}
+
+<header><h2>{{ picture.title }}</h2></header>
+
+<span class="byline">Author: <a href="{% url 'user_detail' picture.author.username %}">{{ picture.author.username }}</a></span>
+<span class="byline">Submitted: {{ picture.submitted_on }}</span>
+<p><img src="{{ picture.image.url }}" width="65%"></p>
+
+<span class="byline">Tagged users:</span>
+<ul>
+    {% for tag in picture.tags.all %}
+        <li><a href="{% url 'user_detail' tag.username %}">{{ tag.username }}</a></li>
+    {% empty %}
+        There are no tagged users!
+    {% endfor %}
+</ul>
+<form action="{% url 'add_tag' %}" method="post">
+    {% csrf_token %}
+    <table>
+        <col width="15%"/>
+        <tr>
+            <td>Tag friend:</td>
+            <td>
+                <select name="tag_username">
+                    {% for option in friends_sel%}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input type="submit" value="Add Tag"/>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="picture_id" value="{{ picture.pk }}">
+</form>
+
+<span class="byline">Likes:</span>
+<ul>
+    {% for like in picture.likes.all %}
+        <li><a href="{% url 'user_detail' like.username %}">{{ like.username }}</a></li>
+    {% empty %}
+        No likes so far!
+    {% endfor %}
+</ul>
+
+<form method="post" action="{% url 'like_picture' picture.pk user.pk %}">
+    {% csrf_token %}
+    {% if liked_picture %}
+        <input type="submit" value="Unlike!"/>
+    {% else %}
+        <input type="submit" value="Like!"/>
+    {% endif %}
+</form>
+
+<span class="byline">Comments:</span>
+<table class="fixed">
+    <col width="20%"/>
+    <col width="10%"/>
+    {% for comment in picture.comment_set.all %}
+        <tr>
+            <td>{{ comment.submitted_on }}</td>
+            <td>{{ comment.author.username }}</td>
+            <td>{{ comment.content }}</td>
+        </tr>
+    {% empty %}
+        There are no comments!
+    {% endfor %}
+</table>
+
+<form method="post" action="{% url 'submit_comment' picture.pk user.pk %}">
+{% csrf_token %}
+    <input type="text" name="content">
+    <input type="submit" value="Submit Comment"/>
+</form>
+
+{% endblock %}

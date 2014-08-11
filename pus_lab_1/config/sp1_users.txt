@@ -1,0 +1,2 @@
+user_1  1111    /Users/Luka/PycharmProjects/pus_lab_1/user_data/user_1
+user_2  2222    /Users/Luka/PycharmProjects/pus_lab_1/user_data/user_2
